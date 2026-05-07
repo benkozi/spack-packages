@@ -13,11 +13,10 @@ class Cece(Package):
     homepage = "https://github.com/ufs-community/CECE"
     url = "https://github.com/UFS-Community/CECE.git"
 
-    maintainers("bbakernoaa", "zmoon")
+    maintainers("bbakernoaa", "zmoon", "benkozi")
 
     license("Apache-2.0")
 
-    # FIXME: Add proper versions and checksums here.
     version("main", branch="main")
 
     depends_on("fortran")
@@ -28,7 +27,9 @@ class Cece(Package):
     depends_on("googletest")
     depends_on("yaml-cpp")
 
+    # TODO add non-container mode
     def install(self, spec, prefix):
-        # FIXME: Unknown build system
-        make()
-        make("install")
+        # Run Docker environment script
+        runfile = glob(join_path(self.stage.source_path, "setup.sh"))[0]
+        runfile = which(runfile, required=True)
+        runfile()

@@ -6,7 +6,7 @@
 from spack.package import *
 
 
-class Cice(MakefilePackage):
+class Cice(Package):
     "CICE is a computationally efficient model for simulating the growth, melting, 
     and movement of polar sea ice."
 
@@ -15,7 +15,7 @@ class Cice(MakefilePackage):
 
     maintainers("apcraig")
 
-    license("BSD-3-Clause", checked_by="github_user1")
+    license("BSD-3-Clause")
 
     version("6.6.3", sha256="efc16625486b46f01409c568f532978690bb37cc12d8b8a121601ffe047e89f4")
     version("6.6.2", sha256="1a265ca44a2d7182cd670ff2023d0ff98bedce7cff7c68fe374de9084ba96b39")
@@ -34,9 +34,7 @@ class Cice(MakefilePackage):
     depends_on("netcdf-fortran")
     depends_on("mpi", when="+mpi")
 
-    def edit(self, spec, prefix):
-        # FIXME: Edit the Makefile if necessary
-        # FIXME: If not needed delete this function
-        # makefile = FileFilter("Makefile")
-        # makefile.filter("CC = .*", "CC = cc")
-        pass
+    def install(self, spec, prefix):
+        # Stage the source tree for user config
+        src_dest = join_path(prefix, "src")
+        install_tree(".", src_dest)
