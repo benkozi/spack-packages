@@ -16,8 +16,9 @@ class Catchem(CMakePackage):
 
     license("Apache-2.0")
 
+    version("develop", branch="develop")
     version("main", branch="main")
-
+        
     depends_on("fortran", type="build")
 
     depends_on("hdf5")
