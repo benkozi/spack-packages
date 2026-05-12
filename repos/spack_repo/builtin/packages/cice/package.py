@@ -7,8 +7,8 @@ from spack.package import *
 
 
 class Cice(Package):
-    "CICE is a computationally efficient model for simulating the growth, melting, 
-    and movement of polar sea ice."
+    """CICE is a computationally efficient model for simulating the growth, melting,
+    and movement of polar sea ice."""
 
     homepage = "https://github.com/CICE-Consortium/CICE"
     url = "https://github.com/CICE-Consortium/CICE/archive/refs/tags/CICE6.6.3.tar.gz"
@@ -27,6 +27,8 @@ class Cice(Package):
     version("6.4.1", sha256="9879f1cd298b7079c7d60b088a5f928d5507626c91d71470f7aeaa54da830657")
     version("6.4.0", sha256="fafbc14e5bc3644f9bd1cbf3db81ef28c83431a78a662974588b597cd3d6155a")
     version("6.3.1", sha256="ee5326c3c34287a49b1bd560da02618a9015e26c2a87dc5199dbe1a230c8f6cf")
+
+    variant("mpi", default=True, description="Activates MPI support")
 
     depends_on("c", type="build")
     depends_on("fortran", type="build")

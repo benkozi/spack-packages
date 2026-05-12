@@ -7,10 +7,10 @@ from spack.package import *
 
 
 class Catchem(CMakePackage):
-    "Configurable ATmospheric Chemistry modelling component."
+    """Configurable ATmospheric Chemistry modelling component."""
 
     homepage = "https://github.com/ufs-community/CATChem"
-    url = "https://github.com/UFS-Community/CATChem.git"
+    git = "https://github.com/UFS-Community/CATChem.git"
 
     maintainers("colin-harkins", "bbakernoaa", "zmoon", "benkozi")
 
@@ -18,12 +18,14 @@ class Catchem(CMakePackage):
 
     version("develop", branch="develop")
     version("main", branch="main")
+
+    variant("mpi", default=True, description="Activates MPI support")
         
     depends_on("fortran", type="build")
 
     depends_on("hdf5")
     depends_on("netcdf-fortran")
-    depends_on("mpi")
+    depends_on("mpi", when="+mpi")
 
     def cmake_args(self) -> list[str]:
         return [
