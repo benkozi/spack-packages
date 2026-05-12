@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index dab95ea..63d8014 100644
+index dab95ea..e976a80 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -29,60 +29,13 @@ endif()
+@@ -29,60 +29,17 @@ endif()
 
  include(FetchContent)
 
@@ -39,10 +39,13 @@ index dab95ea..63d8014 100644
 -FetchContent_Declare(kokkos GIT_REPOSITORY https://github.com/kokkos/kokkos.git GIT_TAG 4.2.00)
 -FetchContent_MakeAvailable(kokkos)
 -
--# YAML-CPP
+ # YAML-CPP
 -FetchContent_Declare(yaml-cpp GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git GIT_TAG 0.8.0)
 -FetchContent_MakeAvailable(yaml-cpp)
-+# Kokko
++find_package(yaml-cpp REQUIRED)
++message(STATUS "Found YAML-CPP: ${yaml-cpp_VERSION}")
++
++# Kokkos
 +find_package(Kokkos REQUIRED)
 +message(STATUS "Found Kokkos: ${Kokkos_VERSION}")
 
@@ -57,6 +60,3 @@ index dab95ea..63d8014 100644
 -
 -# RapidCheck (Property-Based Testing)
 -FetchContent_Declare(
--  rapidcheck
--  GIT_REPOSITORY https://github.com/emil-e/rapidcheck.git
--  GIT_TAG master
