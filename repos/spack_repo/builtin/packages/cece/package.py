@@ -6,7 +6,7 @@
 from spack.package import *
 
 
-class Cece(Package):
+class Cece(CMakePackage):
     """CECE is a high-performance, performance-portable emissions compute
     component for Earth System Models."""
 
@@ -19,23 +19,47 @@ class Cece(Package):
 
     version("main", branch="main")
 
-    variant("kokkos", default=True, description="Use Kokkos")
     variant("mpi", default=True, description="Activates MPI support")
+    variant("gpu", default=False, description="Activates GPU support")
 
     depends_on("fortran", type="build")
     depends_on("c", type="build")
-    depends_on("cxx", type="build")
     
     depends_on("esmf")
-    # TODO Hard-disable tests for now, since rapidcheck not in Spack
     depends_on("googletest")
-    depends_on("kokkos", when="+kokkos")
+    depends_on("kokkos")
     depends_on("mpi", when="+mpi")
+    depends_on("netcdf-c")
+    depends_on("netcdf-fortran")
     depends_on("yaml-cpp")
 
-    # TODO add non-container mode
-    def install(self, spec, prefix):
-        # Run Docker environment script
-        runfile = join_path(self.stage.source_path, "setup.sh")
-        runfile = which(runfile, required=True)
-        runfile()
+    # TODO Hard-disable tests for now, since rapidcheck not in Spack
+    patch("cece_rapidcheck.patch")
+
+    def setup_build_environment(self, env: EnvironmentModifications) -> None:
+        spec = self.spec
+        env.set("CC", spec["mpi"].mpicc)
+        env.set("CXX", spec["mpi"].mpicxx)
+        env.set("FC", spec["mpi"].mpifc)
+        env.set("CMAKE_C_COMPILER", spec["mpi"].mpicc)
+        env.set("CMAKE_CXX_COMPILER", spec["mpi"].mpicxx)
+        env.set("CMAKE_Fortran_COMPILER", spec["mpi"].mpifc)
+
+    # Must build manually for Spack
+    def cmake_args(self):
+        args = [
+            self.define("CMAKE_BUILD_TYPE", "Release"),
+            self.define("NETCDF_ROOT", self.spec["netcdf-c"].prefix),
+            self.define("Kokkos_ROOT", self.spec["kokkos"].prefix),
+        ]
+        if self.spec.satisfies("+mpi"):
+            args += [
+                self.define("Kokkos_ENABLE_OPENMP", True),
+                self.define("Kokkos_ENABLE_SERIAL", True),
+            ]
+        if self.spec.satisfies("+gpu"):
+            args += [
+                self.define("Kokkos_ENABLE_CUDA", True),
+                self.define("Kokkos_ARCH_AMPERE80", True),
+            ]
+        return args

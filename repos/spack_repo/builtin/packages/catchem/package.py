@@ -17,6 +17,8 @@ class Catchem(CMakePackage):
     license("Apache-2.0")
 
     version("develop", branch="develop")
+    version("gcafs", branch="feature/gcafs",
+            git="https://github.com/lwcugb/CATChem.git")
     version("main", branch="main")
 
     variant("mpi", default=True, description="Activates MPI support")
@@ -27,6 +29,16 @@ class Catchem(CMakePackage):
     depends_on("netcdf-fortran")
     depends_on("mpi", when="+mpi")
 
+    def setup_build_environment(self, env: EnvironmentModifications) -> None:
+        spec = self.spec
+        env.set("CC", spec["mpi"].mpicc)
+        env.set("CXX", spec["mpi"].mpicxx)
+        env.set("FC", spec["mpi"].mpifc)
+        env.set("CMAKE_C_COMPILER", spec["mpi"].mpicc)
+        env.set("CMAKE_CXX_COMPILER", spec["mpi"].mpicxx)
+        env.set("CMAKE_Fortran_COMPILER", spec["mpi"].mpifc)
+        env.set("CMAKE_Platform", "linux.intel")
+
     def cmake_args(self) -> list[str]:
         return [
             self.define("CMAKE_BUILD_TYPE", "Release"),
@@ -35,3 +47,8 @@ class Catchem(CMakePackage):
             self.define("NETCDF_ROOT", self.spec["netcdf-c"].prefix),
             self.define("HDF5_ROOT", self.spec["hdf5"].prefix),
         ]
+
+    @run_before("cmake")
+    def add_submodules(self):
+        git = which("git")
+        git("submodule", "update", "--init", "--recursive")

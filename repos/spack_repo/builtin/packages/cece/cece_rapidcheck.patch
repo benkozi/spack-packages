@@ -1,0 +1,62 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dab95ea..63d8014 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -29,60 +29,13 @@ endif()
+
+ include(FetchContent)
+
+-# Kokkos - Configure execution spaces Default to Serial and OpenMP for CPU
+-# portability Users can override with -DKokkos_ENABLE_CUDA=ON or
+-# -DKokkos_ENABLE_HIP=ON for GPU support
+-if(NOT DEFINED Kokkos_ENABLE_SERIAL)
+-  set(Kokkos_ENABLE_SERIAL ON CACHE BOOL "Enable Kokkos Serial execution space" FORCE)
+-endif()
+-
+-if(NOT DEFINED Kokkos_ENABLE_OPENMP)
+-  set(Kokkos_ENABLE_OPENMP ON CACHE BOOL "Enable Kokkos OpenMP execution space" FORCE)
+-endif()
+-
+-# GPU support is optional - users must explicitly enable
+-option(Kokkos_ENABLE_CUDA "Enable Kokkos CUDA execution space for NVIDIA GPUs" OFF)
+-option(Kokkos_ENABLE_HIP "Enable Kokkos HIP execution space for AMD GPUs" OFF)
+-
+-# Python bindings support
+-option(BUILD_PYTHON_BINDINGS "Build Python bindings for CECE" OFF)
+-
+-# Validate that at most one GPU backend is enabled
+-if(Kokkos_ENABLE_CUDA AND Kokkos_ENABLE_HIP)
+-  message(FATAL_ERROR "Cannot enable both CUDA and HIP. Choose one GPU backend or neither.")
+-endif()
+-
+-# Log Kokkos configuration
+-message(STATUS "Kokkos Execution Spaces Configuration:")
+-message(STATUS "  Serial: ${Kokkos_ENABLE_SERIAL}")
+-message(STATUS "  OpenMP: ${Kokkos_ENABLE_OPENMP}")
+-message(STATUS "  CUDA: ${Kokkos_ENABLE_CUDA}")
+-message(STATUS "  HIP: ${Kokkos_ENABLE_HIP}")
+-
+-FetchContent_Declare(kokkos GIT_REPOSITORY https://github.com/kokkos/kokkos.git GIT_TAG 4.2.00)
+-FetchContent_MakeAvailable(kokkos)
+-
+-# YAML-CPP
+-FetchContent_Declare(yaml-cpp GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git GIT_TAG 0.8.0)
+-FetchContent_MakeAvailable(yaml-cpp)
++# Kokko
++find_package(Kokkos REQUIRED)
++message(STATUS "Found Kokkos: ${Kokkos_VERSION}")
+
+ # GTest
+-FetchContent_Declare(
+-  googletest
+-  GIT_REPOSITORY https://github.com/google/googletest.git
+-  GIT_TAG v1.14.0
+-)
+-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+-FetchContent_MakeAvailable(googletest)
+-
+-# RapidCheck (Property-Based Testing)
+-FetchContent_Declare(
+-  rapidcheck
+-  GIT_REPOSITORY https://github.com/emil-e/rapidcheck.git
+-  GIT_TAG master
