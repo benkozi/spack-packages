@@ -22,12 +22,14 @@ class Catchem(CMakePackage):
     version("main", branch="main")
 
     variant("mpi", default=True, description="Activates MPI support")
+    variant("nuopc", default=False, description="Activates NUOPC mode")
         
     depends_on("fortran", type="build")
 
     depends_on("hdf5")
     depends_on("netcdf-fortran")
     depends_on("mpi", when="+mpi")
+    depends_on("esmf", whem="+nuopc")
 
     def setup_build_environment(self, env: EnvironmentModifications) -> None:
         spec = self.spec
@@ -40,13 +42,14 @@ class Catchem(CMakePackage):
         env.set("CMAKE_Platform", "linux.intel")
 
     def cmake_args(self) -> list[str]:
-        return [
+        args = [
             self.define("CMAKE_BUILD_TYPE", "Release"),
             self.define("MPI", True),
             self.define("OPENMP", True),
             self.define("NETCDF_ROOT", self.spec["netcdf-c"].prefix),
             self.define("HDF5_ROOT", self.spec["hdf5"].prefix),
         ]
+        return args
 
     @run_before("cmake")
     def add_submodules(self):
