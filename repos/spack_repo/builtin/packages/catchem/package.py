@@ -29,7 +29,7 @@ class Catchem(CMakePackage):
     depends_on("hdf5")
     depends_on("netcdf-fortran")
     depends_on("mpi", when="+mpi")
-    depends_on("esmf", whem="+nuopc")
+    depends_on("esmf", when="+nuopc")
 
     def setup_build_environment(self, env: EnvironmentModifications) -> None:
         spec = self.spec
