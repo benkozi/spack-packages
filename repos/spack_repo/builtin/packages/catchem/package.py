@@ -51,8 +51,8 @@ class Catchem(CMakePackage):
         ]
         if self.spec.satisfies("+nuopc"):
             args += [
-                self.define("CATCHEM_BUILD_NUOPC", True),
-                self.define("CATCHEM_TRACE_NUOPC", True),
+                self.define("CATCHEM_BUILD_NUOPC", False),
+                self.define("CATCHEM_TRACE_NUOPC", False),
                 self.define("CATCHEM_BUILD_TESTING", True),
             ]
         return args
