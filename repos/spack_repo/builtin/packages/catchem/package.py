@@ -49,6 +49,12 @@ class Catchem(CMakePackage):
             self.define("NETCDF_ROOT", self.spec["netcdf-c"].prefix),
             self.define("HDF5_ROOT", self.spec["hdf5"].prefix),
         ]
+        if self.spec.satisfies("+nuopc"):
+            args += [
+                self.define("CATCHEM_BUILD_NUOPC", True),
+                self.define("CATCHEM_TRACE_NUOPC", True),
+                self.define("CATCHEM_BUILD_TESTING", True),
+            ]
         return args
 
     @run_before("cmake")
