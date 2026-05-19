@@ -22,6 +22,10 @@ class Catchem(CMakePackage):
             git="https://github.com/benkozi/CATChem.git")
     version("main", branch="main")
 
+    #TODO: debug mode
+    #TODO: with musica
+    #TODO: with testing
+
     variant("mpi", default=True, description="Activates MPI support")
     variant("nuopc", default=False, description="Activates NUOPC mode")
         
