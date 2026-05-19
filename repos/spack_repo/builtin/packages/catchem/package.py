@@ -6,6 +6,7 @@
 from spack_repo.builtin.build_systems.cmake import CMakePackage
 
 from spack.package import *
+from spack_repo.builtin.build_systems.cmake import CMakePackage
 
 
 class Catchem(CMakePackage):
@@ -23,9 +24,15 @@ class Catchem(CMakePackage):
             git="https://github.com/lwcugb/CATChem.git")
     version("main", branch="main")
 
+    #TODO: debug mode
+    #TODO: with musica
+    #TODO: with testing
+
     variant("mpi", default=True, description="Activates MPI support")
     variant("nuopc", default=False, description="Activates NUOPC mode")
         
+    depends_on("c", type="build")
+    depends_on("cxx", type="build")
     depends_on("fortran", type="build")
 
     depends_on("hdf5")
