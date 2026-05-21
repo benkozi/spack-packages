@@ -39,6 +39,7 @@ class Catchem(CMakePackage):
     depends_on("netcdf-fortran")
     depends_on("mpi", when="+mpi")
     depends_on("esmf", when="+nuopc")
+    depends_on("yaml-cpp")
 
     def setup_build_environment(self, env: EnvironmentModifications) -> None:
         spec = self.spec
