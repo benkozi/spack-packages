@@ -20,8 +20,8 @@ class Catchem(CMakePackage):
     license("Apache-2.0")
 
     version("develop", branch="develop")
-    version("gcafs", branch="feature/gcafs",
-            git="https://github.com/lwcugb/CATChem.git")
+    version("gcafs", branch="feature/find-yaml-cpp",
+            git="https://github.com/benkozi/CATChem.git")
     version("main", branch="main")
 
     #TODO: debug mode
